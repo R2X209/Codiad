@@ -318,9 +318,9 @@ class diff_match_patch {
 			$lineStart = $lineEnd +1;
 
 			if ( isset($lineHash[$line]) ) {
-				$chars .= mb_chr($lineHash[$line]);
+				$chars .= codiad_mb_chr($lineHash[$line]);
 			} else {
-				$chars .= mb_chr($lineArrayLength);
+				$chars .= codiad_mb_chr($lineArrayLength);
 				$lineHash[$line] = $lineArrayLength;
 				$lineArray[$lineArrayLength++] = $line;
 			}
@@ -1778,7 +1778,7 @@ class diff_match_patch {
 		$paddingLength = $this->Patch_Margin;
 		$nullPadding = '';
 		for ($x = 1; $x <= $paddingLength; $x++) {
-			$nullPadding .= mb_chr($x);
+			$nullPadding .= codiad_mb_chr($x);
 		}
 
 		// Bump all the patches forward.
@@ -2069,20 +2069,16 @@ define('Match_MaxBits', PHP_INT_SIZE * 8);
 
 
 function charCodeAt($str, $pos) {
-	return mb_ord(mb_substr($str, $pos, 1));
+	return codiad_mb_ord(mb_substr($str, $pos, 1));
 }
-if(!function_exists('mb_ord')) {
-	function mb_ord($v) {
-		$k = mb_convert_encoding($v, 'UCS-2LE', 'UTF-8'); 
-		$k1 = ord(substr($k, 0, 1)); 
-		$k2 = ord(substr($k, 1, 1)); 
-		return $k2 * 256 + $k1; 
-	}
+function codiad_mb_ord($v) {
+	$k = mb_convert_encoding($v, 'UCS-2LE', 'UTF-8'); 
+	$k1 = ord(substr($k, 0, 1)); 
+	$k2 = ord(substr($k, 1, 1)); 
+	return $k2 * 256 + $k1; 
 }
-if(!function_exists('mb_chr')) {
-	function mb_chr($num){
-		return mb_convert_encoding('&#'.intval($num).';', 'UTF-8', 'HTML-ENTITIES');
-	}
+function codiad_mb_chr($num){
+	return mb_convert_encoding('&#'.intval($num).';', 'UTF-8', 'HTML-ENTITIES');
 }
 
 /**
